@@ -1,7 +1,7 @@
 uniform float uTime;
-varying vec2 vUv;
 attribute float group;
 varying float vGroup;
+varying float vOpacity;
 
 void main() {
     vGroup = group;
@@ -11,7 +11,7 @@ void main() {
     vec4 projectedPosition = projectionMatrix * viewPosition;
     
     gl_Position = projectedPosition;
-    gl_PointSize = 10.0; // Simple particle size
     
-    vUv = uv;
+    // Create pulsing opacity based on time
+    vOpacity = 0.4 + 0.3 * sin(uTime * 0.1);
 }

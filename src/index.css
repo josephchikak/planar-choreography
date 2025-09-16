@@ -9,6 +9,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(135deg, #080818 0%, #0b0e18 50%, #071629 100%);
+  overflow: hidden;
 }
 
 .canvas {

@@ -1,8 +1,8 @@
-varying vec2 vUv;
 varying float vGroup;
+varying float vOpacity;
 
 vec3 getGroupColor(float group) {
-    // 12 distinct colors for each group - matching line colors
+    // 12 distinct colors for each group
     if (group < 1.0) return vec3(1.0, 0.0, 0.0); // Red
     if (group < 2.0) return vec3(0.0, 1.0, 0.0); // Green
     if (group < 3.0) return vec3(0.0, 0.0, 1.0); // Blue
@@ -19,5 +19,5 @@ vec3 getGroupColor(float group) {
 
 void main() {
     vec3 color = getGroupColor(vGroup);
-    gl_FragColor = vec4(color, 1.0);
+    gl_FragColor = vec4(color, vOpacity * 0.8);
 }
