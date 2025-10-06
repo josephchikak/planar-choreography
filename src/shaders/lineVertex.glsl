@@ -3,6 +3,7 @@ attribute float group;
 varying float vGroup;
 varying float vOpacity;
 
+
 void main() {
     vGroup = group;
     

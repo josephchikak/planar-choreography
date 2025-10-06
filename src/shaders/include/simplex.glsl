@@ -1,15 +1,3 @@
-uniform float uTime;
-varying vec2 vUv;
-attribute float group;
-varying float vGroup;
-uniform float uSize;
-attribute float aScale;
-attribute vec3 color;
-varying vec3 vColor;
-uniform float uPosition;
-
-
-// simplex noise functions (inlined)
 //	Simplex 3D Noise 
 //	by Ian McEwan, Stefan Gustavson (https://github.com/stegu/webgl-noise)
 //
@@ -83,35 +71,4 @@ float snoise(vec3 v){
   m = m * m;
   return 42.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1), 
                                 dot(p2,x2), dot(p3,x3) ) );
-}
-
-void main() {
-    vGroup = group;
-    
-    // Create a unique seed for each particle using vertex ID
-    vec3 seed = vec3(float(gl_VertexID), float(gl_VertexID) * 0.1, float(gl_VertexID) * 0.01);
-    
-    // Generate random offset using Perlin noise
-    float noiseX = snoise(seed + vec3(0.0, 0.0, 0.0));
-    float noiseY = snoise(seed + vec3(100.0, 0.0, 0.0));
-    float noiseZ = snoise(seed + vec3(0.0, 100.0, 0.0));
-    
-    // Create random offset vector
-    vec3 randomOffset = vec3(noiseX, noiseY, noiseZ) * uPosition;
-    
-    // Apply random positioning to the original position
-    vec3 newPosition = position + randomOffset;
-    // newPosition.z = 0.0;
-    
-    vec4 modelPosition = modelMatrix * vec4(newPosition, 1.0);
-    vec4 viewPosition = viewMatrix * modelPosition;
-    vec4 projectedPosition = projectionMatrix * viewPosition;
-    
-    gl_Position = projectedPosition;
-    gl_PointSize = uSize * aScale  ;
-    gl_PointSize +=(1.0 / - viewPosition.z);
-    // gl_PointSize = 20.0;
-    
-    vUv = uv;
-    vColor = color;
 }

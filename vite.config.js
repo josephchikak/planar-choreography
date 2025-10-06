@@ -1,14 +1,25 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import tailwindcss from 'tailwindcss'
+import restart from 'vite-plugin-restart'
 import glsl from 'vite-plugin-glsl'
 
-
-
-export default defineConfig({
-  plugins: [react(), tailwindcss(), glsl()],
-  server: {
-    port: 3000,
-    open: true
-  }
-}) 
+export default {
+    root: 'src/',
+    publicDir: '../static/',
+    base: './',
+    server:
+    {
+        host: true, // Open to local network and display URL
+        open: !('SANDBOX_URL' in process.env || 'CODESANDBOX_HOST' in process.env) // Open if it's not a CodeSandbox
+    },
+    build:
+    {
+        outDir: '../dist', // Output in the dist/ folder
+        emptyOutDir: true, // Empty the folder first
+        sourcemap: true,// Add sourcemap
+        target:'esnext' //make it compatible with only modern browsers
+    },
+    plugins:
+    [
+        restart({ restart: [ '../static/**', ] }), // Restart server on static file change
+        glsl() // Handle shader files
+    ]
+}

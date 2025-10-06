@@ -1,5 +1,6 @@
 varying float vGroup;
 varying float vOpacity;
+varying vec3 vColor;
 
 vec3 getGroupColor(float group) {
     // 12 distinct colors for each group
@@ -19,5 +20,11 @@ vec3 getGroupColor(float group) {
 
 void main() {
     vec3 color = getGroupColor(vGroup);
-    gl_FragColor = vec4(color, vOpacity * 0.8);
+
+    // color = color * vColor;
+
+    gl_FragColor = vec4(0.3, 0.25, 0.46, 0.2);
+    // gl_FragColor = vec4(vColor, 1.0);
+    #include <tonemapping_fragment>
+    #include <colorspace_fragment> // Make lines fully opaque and visible
 }

@@ -2,27 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
+html, body {
   margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(135deg, #080818 0%, #0b0e18 50%, #071629 100%);
+  background: linear-gradient(135deg, #161619 0%, #090b11 50%, #02070d 100%);
   overflow: hidden;
-}
+}ß
 
 .canvas {
-    pointer-events: none;
-    position: absolute !important;
-    top: 0px;
-    left: 0px;
+    /* pointer-events: none; */
+    /* position: absolute !important; */
+    /* top: 0px;
+    left: 0px; */
     width: 100vw;
     height: 100vh;
-  }
+  } 
 
-#root {
+/* #__next {
   width: 100%;
   height: 100vh;
-} 
+} */
