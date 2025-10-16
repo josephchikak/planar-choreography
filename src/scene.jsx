@@ -18,7 +18,7 @@ import { useStore } from "./utils/useStore";
 import { seededRandom } from "three/src/math/MathUtils.js";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
-import { index } from "d3";
+import tunnel from "tunnel-rat";
 
 gsap.registerPlugin(useGSAP);
 
@@ -290,6 +290,7 @@ const CustomGeometryParticles = ({ data, count, originalData, groupIndex }) => {
   useFrame((state) => {
     const { clock } = state;
     const gl = state.gl;
+    gl.setClearColor(0x141204, 1);
 
     gl.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
@@ -512,6 +513,8 @@ export default function Scene({ fullData }) {
           />
         </>
       )}
+
+        
 
       <OrbitControls
         enableRotate={false}

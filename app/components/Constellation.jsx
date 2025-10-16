@@ -6,6 +6,8 @@ import { use, useEffect, useState } from 'react';
 import { Bvh } from "@react-three/drei";
 import * as THREE from 'three'
 import { useStore } from "../../src/utils/useStore";
+import tunnel from "tunnel-rat";
+
 
 // Dynamically import components that use React hooks to avoid SSR issues
 const Scene = dynamic(() => import('../../src/scene'), { ssr: false });
@@ -15,6 +17,7 @@ const CinemaInfo = dynamic(() => import('../../src/components/CinemaInfo'), { ss
 
 
 export default function Constellation({fullData}) {
+  const t = tunnel();
 
   // const {fullData} =useStore();
 
@@ -57,6 +60,8 @@ export default function Constellation({fullData}) {
         camera={{ position: [0, 0, 50], fov: 75, }}
         // events={eventManagerFactory}
       >
+     
+
         <Bvh firstHitOnly>
 
         <Scene 

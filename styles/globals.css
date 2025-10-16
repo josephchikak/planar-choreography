@@ -1,6 +1,11 @@
+
+/* @import "tailwindcss"; */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
 
 html, body {
   margin: 0;
@@ -12,9 +17,20 @@ html, body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(135deg, #161619 0%, #090b11 50%, #02070d 100%);
-  overflow: hidden;
-}ß
+  
+  /* background: var(--color-primary); */
+  /* overflow: hidden; */
+}
+
+@theme inline {
+  /* --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-outfit: var(--font-outfit); */
+
+  --color-primary: #FFD700;
+}
 
 .canvas {
     /* pointer-events: none; */

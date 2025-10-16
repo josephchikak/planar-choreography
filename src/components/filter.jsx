@@ -9,7 +9,7 @@ const Filter = ({}) => {
 
   // console.log(originalData)
   const handleFilterChange = (field, value) => {
-    if (value === "clear") {
+    if (field === "clear") {
       clearFilters();
     } else {
       updateFilters(field, value);
@@ -33,10 +33,10 @@ const Filter = ({}) => {
 
   return (
     <div
-      className="flex flex-col font-inter gap-4 w-1/6 h-[100vh] justify-start items-center bg-black z-50 p-4"
+      className="flex flex-col font-inter gap-4 w-1/6 h-[100vh]  border-r-[0.5px] border-primary justify-start items-center bg-background z-50 p-4"
       pointerEvents="auto"
     >
-      <h2 className="text-white text-xs text-center">Filter cinemas</h2>
+      <h2 className="text-primary text-xs text-center">Filter cinemas</h2>
       <div className="flex flex-col w-full h-full">
         {fieldNames.map((field) => (
           <div
@@ -48,7 +48,7 @@ const Filter = ({}) => {
                 </label> */}
 
             <select
-              className="p-2 m-2 bg-slate-900 cursor-pointer text-white bg-opacity-20 w-full text-xs text-center"
+              className="p-2 m-2 bg-slate-900 cursor-pointer border-primary border-[0.5px] text-primary bg-opacity-20 w-full text-xs text-center"
               value={filters[field] || "all"}
               onChange={(e) => handleFilterChange(field, e.target.value)}
             >
@@ -64,7 +64,7 @@ const Filter = ({}) => {
       </div>
 
       <button
-        className=" mt-4 bg-slate-900 bg-opacity-50 text-white text-xs px-4 py-2 rounded pointer"
+        className=" mt-4 bg-slate-900 bg-opacity-50 border-primary border-[0.5px] text-primary text-xs px-4 py-2 rounded pointer"
         onClick={() => handleFilterChange("clear", "all")}
       >
         Clear Filters

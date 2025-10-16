@@ -5,7 +5,34 @@ export const metadata = {
   description: 'Interactive visualization of cinema data',
 }
 
-import { Open_Sans, Roboto_Mono, Sansation } from 'next/font/google'
+import { Open_Sans, Roboto_Mono, Sansation, Montez, Jura } from 'next/font/google'
+
+import localFont from 'next/font/local'
+import Link from 'next/link'
+
+const clash = localFont({
+  src: '../public/fonts/ClashDisplay-Variable.woff',
+  variable: '--font-clash',
+  display: 'swap',
+  style: '',
+  subsets: ['latin'],
+  // weight: '200',
+})
+
+const chillax = localFont({
+  src: '../public/fonts/Chillax-Regular.woff',
+  variable: '--font-chillax',
+  display: 'swap',
+  style: 'normal',
+
+})
+
+const basis = localFont({
+  src: '../public/fonts/BasisGrotesqueMonoPro-Regular.woff',
+  variable: '--font-basis',
+  display: 'swap',
+  style: 'normal',
+})
 
 const openSans = Open_Sans({
   subsets: ['latin'],
@@ -28,15 +55,46 @@ const sansation = Sansation({
   weight: '400',
 })
 
+const montez = Montez({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-montez',
+  weight: '400',
+})
+
+const jura = Jura({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-jura',
+  weight: '400',
+})
+
 
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en"
-      className={`${openSans.variable} ${robotoMono.variable} ${sansation.variable} font-sans`}
+      className={`${openSans.variable} ${robotoMono.variable} ${sansation.variable} ${montez.variable} ${jura.variable} ${clash.variable} ${chillax.variable} ${basis.variable} font-sans`}
     >
+    
       <body>
+      <nav className='w-screen flex justify-center items-center font-chillax font-thin  bg-background  border-b-[0.5px] border-primary p-4 text-primary'>
+        <Link href='/' className='cursor-pointer p-4 text-2xl'>Dream Palaces</Link>
+       
+
+      </nav>
         {children}
+        <footer className='w-screen h-[10vh] flex flex-col md:flex-row justify-center items-center font-basis  bg-background  border-t-[0.5px] border-primary p-4 text-primary gap-2 text-xs'>
+          <p>© 2025 Dream Palaces</p>
+          <p className='hidden md:block'>|</p>
+          <p><Link  className='underline' href='/' >Home</Link></p>
+          <p className='hidden md:block'>|</p>
+          <p><Link  className='underline' href='/constellation' >Constellation</Link></p>
+          <p className='hidden md:block'>|</p>
+          <p><Link href='/constellation' className='underline'>3D Map</Link></p>
+          <p className='hidden md:block'>|</p>
+          <p><Link href='/constellation' className='underline'>Screening Room</Link></p>
+        </footer>
       </body>
     </html>
   )

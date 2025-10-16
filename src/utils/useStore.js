@@ -68,13 +68,34 @@ setAnimateParticles: (animateFn) => set({animateParticles: animateFn}),
 
 
   
-  clearFilters: () => set((state) => {
-    const clearedFilters = {};
-    Object.keys(state.filters).forEach(key => {
-      clearedFilters[key] = 'all';
-    });
-    return { filters: clearedFilters, filteredData: state.normalizedData};
-  }),
+clearFilters: () => set((state) => {
+
+  if (!state.filters) {
+    return { 
+      filters: {}, 
+      filteredData: state.data || state.normalizedData 
+    };
+  }
+
+  const clearedFilters = {};
+  Object.keys(state.filters).forEach(key => {
+    clearedFilters[key] = 'all';
+  });
+
+  // Use original data
+  const resetData = state.data || state.normalizedData;
+  
+
+  if (state.animateParticles) {
+    state.animateParticles();
+  }
+
+  return { 
+    filters: clearedFilters, 
+    filteredData: resetData,
+    filterUpdate: !state.filterUpdate 
+  };
+}),
 
 
   applyFilters: (data, filters) =>{
