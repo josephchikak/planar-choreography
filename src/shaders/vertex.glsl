@@ -100,10 +100,10 @@ void main() {
   vec3 randomOffset = vec3(noiseX, noiseY, noiseZ) * uPosition;
 
     // Apply random positioning to the original position
-  // vec3 newPosition = position + randomOffset;
+  vec3 newPosition = position + randomOffset;
     // newPosition.z = 0.0;
 
-  vec4 modelPosition = modelMatrix * vec4(position, 1.0);
+  vec4 modelPosition = modelMatrix * vec4(newPosition, 1.0);
   vec4 viewPosition = viewMatrix * modelPosition;
   vec4 projectedPosition = projectionMatrix * viewPosition;
 
