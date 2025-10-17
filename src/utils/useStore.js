@@ -1,3 +1,4 @@
+
 import { create } from 'zustand'
 
 export const useStore = create((set, get) => ({
@@ -14,6 +15,7 @@ export const useStore = create((set, get) => ({
     progress: { loaded: 0, total: 0, percentage: 0 },
     error: null
   },
+  preparedData: null,
 
 //actions
 setData: (data) => set({ 
@@ -30,6 +32,7 @@ setData: (data) => set({
 
 
 setAirtableData: (data) => set({ airtableData: data }),
+setPreparedData: (prepared) => set({ preparedData: prepared }),
 setFilters: (filters) => set({ filters: filters }),
 setSelectedCinema: (cinema) => set({ selectedCinema: cinema }),
 clearSelectedCinema: () => set({ selectedCinema: null }),

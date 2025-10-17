@@ -73,7 +73,8 @@ export default function Constellation({fullData}) {
       </Canvas>
       
    
-      <CinemaInfo />
+        <CinemaInfo />
+    
     </div>
   );
 }

@@ -22,7 +22,8 @@ export const analyzeAirtableData = (airtableData) => {
     byCreation: d3.group(data, d => d.Creation),
     byClosure: d3.group(data, d => d.Closure),
     byCondition: d3.group(data, d => d.Condition),
-    byState: d3.group(data, d => d.State)
+    byState: d3.group(data, d => d.State),
+    byFeature: d3.group(data, d => d.Feature),
   };
 
   // Count unique values for each field
@@ -48,6 +49,7 @@ export const analyzeAirtableData = (airtableData) => {
     Creation: d3.groups(data, d => d.Creation),
     Closure: d3.groups(data, d => d.Closure),
     Condition: d3.groups(data, d => d.Condition),
+    Feature: d3.groups(data, d => d.Feature),
     // Notes: d3.groups(data, d => d.Notes)
     // State: d3.groups(data, d => d.State)
   }

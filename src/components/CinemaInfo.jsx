@@ -1,24 +1,38 @@
 import React from 'react';
 import { useStore } from '../utils/useStore';
+import Image from 'next/image';
 
 const CinemaInfo = () => {
   const { selectedCinema, clearSelectedCinema } = useStore();
 
   if (!selectedCinema) return null;
 
+
   return (
-    <div className="fixed bottom-4 right-4 z-50 bg-background bg-opacity-90 text-white p-6 w-96 h-48 rounded-xl shadow-2xl font-inter ">
+    <div className="fixed bottom-10 text-primary right-5 z-50 bg-background bg-opacity-90  p-8 w-[25vw] h-1/2 overflow-y-scroll no-scrollbar  border-primary border-[0.5px] rounded-xl shadow-2xl font-basis ">
       <div className="font-bold  mb-3 ">{selectedCinema.fields.Name}</div>
-      <div className="text-gray-300 text-xs mb-2 ">
+      <div className="text-xs mb-2 ">
         {selectedCinema.fields.City}, {selectedCinema.fields.Country}
       </div>
-      <div className="text-gray-300 mb-2 text-xs">
+      <div className=" mb-2 text-xs">
         {selectedCinema.fields.Creation} - {selectedCinema.fields.Closure}
       </div>
-      <div className="text-gray-400 text-xs">
+      <div className="text-gray-400 text-xs mb-2">
         {selectedCinema.fields.Condition}
       </div>
-      <button 
+      {selectedCinema.fields.Images && selectedCinema.fields.Images.length > 0 && (
+        <Image
+          src={selectedCinema.fields.Images[0].url}
+          alt={selectedCinema.fields.Name}
+          width={100}
+          height={100}
+          className="object-cover mb-2"
+        />
+      )}
+      <div className='text-xs font-primary'>
+        <p>{selectedCinema.fields.Notes}</p>
+      </div>
+      <button
         onClick={clearSelectedCinema}
         className="absolute top-2 right-2 text-gray-400 hover:text-white text-xl"
       >

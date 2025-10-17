@@ -37,7 +37,7 @@ export default async function HomePage() {
   const modes =[
     { name: "CONSTELLATION", description: "Explore a constellation of over 1000 cinemas, each representing a unique story and history. Click on individual cinemas to uncover their narratives.", link: "/constellation" },
     { name: "3D MAP", description: "Navigate a 3D map showcasing the geographical distribution of cinemas across Africa and the diaspora. Zoom in to discover detailed information about each location.", link: "/map" },
-    { name: "SCREENING ROOM", description: "Use your mobile device to experience movies from a virtual screening room.", link: "/ar" },
+    { name: "SCREENING ROOM", description: "Use your mobile device to experience movies from a virtual screening room.", link: "/screening" },
    
 
   ]
@@ -85,7 +85,7 @@ export default async function HomePage() {
 
           <div className="flex flex-col gap-8 w-full h-full items-between justify-start py-8 ">
             {modes.map((mode, index) => (
-              <Link key={index} href="/constellation">
+              <Link key={index} href={mode.link}>
 
             <div className=" w-full flex flex-row gap-4 items-start border-y-[0.5px] p-8 transition-all duration-200 ease-in-out hover:border-green-600">
             <div className="flex flex-col justify-end text-primary gap-4 md:w-1/2 text-xl">

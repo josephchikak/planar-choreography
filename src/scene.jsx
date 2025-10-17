@@ -80,11 +80,13 @@ const ConstellationBackground = () => {
 };
 
 const CustomGeometryParticles = ({ data, count, originalData, groupIndex }) => {
+
+  
   const points = useRef();
   const particlesRef = useRef();
 
   useThree((state) => {
-    state.raycaster.params.Points.threshold = 10;
+    state.raycaster.params.Points.threshold = 5; // Much more precise - only detect when actually close to particles
 
     state.raycaster.near = 0; // start checking just in front of the camera
     // state.raycaster.far = 150;
@@ -110,25 +112,6 @@ const CustomGeometryParticles = ({ data, count, originalData, groupIndex }) => {
   }, [setAnimateParticles]);
 
   // const [hoveredIndex, setHoveredIndex] = useState(null);
-
-  // Scale only the hovered particle
-  // const handlePointerOver = (event) => {
-  //   if (event.object === points.current) {
-  //     const pointIndex = event.index;
-  //     setHoveredIndex(pointIndex);
-
-  //     // Scale only this specific particle
-  //     gsap.to(scales, {
-  //       [pointIndex]: 5.0, // Scale up this specific particle
-  //       duration: 0.3,
-  //       ease: "power2.out",
-  //       onUpdate: () => {
-  //         // Update the buffer attribute so the change is visible
-  //         points.current.geometry.attributes.aScale.needsUpdate = true;
-  //       }
-  //     });
-  //   }
-  // };
 
   // const handlePointerOut = (event) => {
   //   if (event.object === points.current) {
@@ -165,18 +148,46 @@ const CustomGeometryParticles = ({ data, count, originalData, groupIndex }) => {
 
   // Handle click on particles
   const handleClick = (e) => {
-    // console.log(e)
-
     e.stopPropagation();
-    // if (e.object === points.current) {
-    const pointIndex = e.index;
-    // console.log('Clicked particle index:', pointIndex);
-    // console.log('Total particles:', data.length);
-    const cinema = data[pointIndex]; // Use data prop directly
-    // console.log('Selected cinema:', cinema);
-    setSelectedCinema(cinema);
-
-    // }
+    
+    // Get ALL intersections and sort by distance (closest first)
+    const intersections = e.intersections || [e];
+    
+    // Sort intersections by distance (closest to camera first)
+    intersections.sort((a, b) => a.distance - b.distance);
+    
+    // Look for the closest intersection that's actually clickable
+    let selectedIntersection = null;
+    
+    // First, try to find a featured cinema among the closest intersections
+    const closeThreshold = intersections[0]?.distance + 2; // Allow small distance variation
+    const closeIntersections = intersections.filter(int => int.distance <= closeThreshold);
+    
+    // Among close intersections, prefer featured cinemas
+    for (const intersection of closeIntersections) {
+      const pointIndex = intersection.index;
+      const cinema = originalData[pointIndex];
+      const isFeatured = featuredCinemas.has(cinema.id);
+      
+      if (isFeatured) {
+        selectedIntersection = intersection;
+        break;
+      }
+    }
+    
+    // If no featured cinema found among close intersections, use the closest one
+    if (!selectedIntersection) {
+      selectedIntersection = intersections[0];
+    }
+    
+    if (selectedIntersection) {
+      const pointIndex = selectedIntersection.index;
+      const cinema = originalData[pointIndex];
+      
+      if (cinema && cinema.id) {
+        setSelectedCinema(cinema);
+      }
+    }
   };
 
   const uniforms = useMemo(() => {
@@ -193,12 +204,12 @@ const CustomGeometryParticles = ({ data, count, originalData, groupIndex }) => {
     };
   }, []);
 
-  const radius = 80; // Much larger radius for better spread
+  const radius = 70; // Much larger radius for better spread
 
   // const count = 100;
   //  const count = data.length
   const countryColorMap = useMemo(() => {
-     const countries = new Set();
+    const countries = new Set();
     originalData.forEach((cinema) => {
       countries.add(cinema.fields?.Country || "Unknown");
     });
@@ -213,7 +224,7 @@ const CustomGeometryParticles = ({ data, count, originalData, groupIndex }) => {
       [0.53, 0.81, 0.92], // Blue
       [0.0, 1.0, 0.0], // Green
       [1.0, 0.0, 0.0], // Red
-     
+
       [1.0, 1.0, 0.0], // Yellow
       [1.0, 0.0, 1.0], // Magenta
       [0.0, 1.0, 1.0], // Cyan
@@ -239,10 +250,25 @@ const CustomGeometryParticles = ({ data, count, originalData, groupIndex }) => {
       colorMap[country] = colorPalette[index % colorPalette.length];
     });
 
-   return colorMap;
+    return colorMap;
+  }, [originalData]);
+
+  // Create a set of featured cinema IDs for quick lookup
+  const featuredCinemas = useMemo(() => {
+    const preparedData = analyzeAirtableData(originalData);
+    const featured = new Set();
+    
+    if (preparedData?.Feature?.[1]?.[1]) {
+      preparedData.Feature[1][1].forEach((cinema) => {
+        featured.add(cinema.id);
+      });
+    }
+    
+    return featured;
   }, [originalData]);
 
   const { positions, groups, scales, colors } = useMemo(() => {
+   
     const groups = new Float32Array(count);
     const positions = new Float32Array(count * 3);
     const scales = new Float32Array(count);
@@ -254,10 +280,8 @@ const CustomGeometryParticles = ({ data, count, originalData, groupIndex }) => {
       return x - Math.floor(x);
     };
 
-   
-
     for (let i = 0; i < count; i++) {
-      const cinema = data[i];
+      const cinema = originalData[i];
       const fields = cinema.fields;
       const country = fields?.Country || "Unknown";
 
@@ -269,15 +293,24 @@ const CustomGeometryParticles = ({ data, count, originalData, groupIndex }) => {
 
       // Use cinema ID as seed for consistent random values
       const seed = cinema.id ? cinema.id.charCodeAt(0) + i : i;
-      scales[i] = Math.random() * 1.0 + 0.5; // Random scale between 0.5 and 1.5
-
+      
+      // Check if this cinema is featured using the same method as featuredCinemas Set
+      const isFeatured = featuredCinemas.has(cinema.id);
+      
+      if (isFeatured) {
+        scales[i] = 5.0; // Large scale for featured cinemas
+        colors.set([1.0, 0.84, 0.0], i * 3); // Gold color for featured cinemas
+      } else {
+        scales[i] = seededRandom(seed + 4) * 1.5 + 1.0; // Random scale for non-featured cinemas (1.0 to 2.5)
+      }
+    
       // Use simple random positioning (vertex shader will add Perlin noise)
-      const distance = Math.sqrt(Math.random(seed + 1)) * radius;
-      const theta = Math.random(seed + 2) * 360;
-      const phi = Math.random(seed + 3) * 360;
+      const distance = Math.sqrt(seededRandom(seed + 1)) * radius;
+      const theta = seededRandom(seed + 2) * 360;
+      const phi = seededRandom(seed + 3) * 360;
 
       let x = distance * Math.sin(theta) * Math.cos(phi);
-      let y = distance * Math.sin(theta) * Math.sin(phi);
+      let y = distance * Math.sin(theta) * Math.sin(phi) + 10;
       let z = 0;
 
       // add the 3 values to the attribute array for every loop
@@ -285,7 +318,7 @@ const CustomGeometryParticles = ({ data, count, originalData, groupIndex }) => {
     }
 
     return { positions, groups, scales, colors };
-  }, [count, groupIndex, data]);
+  }, [count, groupIndex, originalData, featuredCinemas]);
 
   useFrame((state) => {
     const { clock } = state;
@@ -411,13 +444,13 @@ const CustomGeometryParticles = ({ data, count, originalData, groupIndex }) => {
 
 export default function Scene({ fullData }) {
   const {
-    airtableData,
-    setData,
-    setAirtableData,
+
+    setData, 
     setFilters,
     filteredData,
     setLoading,
     setProgress,
+  
   } = useStore();
 
   const [count, setCount] = useState(0);
@@ -453,7 +486,8 @@ export default function Scene({ fullData }) {
         percentage: 100,
       });
 
-      console.log("📊 D3 Prepared Data:", prepared);
+      console.log("📊 D3 Prepared Data:", prepared.Feature[1][1]);
+     
     }
   }, [fullData]);
 
@@ -503,7 +537,7 @@ export default function Scene({ fullData }) {
         <>
           <CustomGeometryParticles
             data={filteredData}
-            originalData={fullData}
+            originalData={filteredData}
             count={filteredData.length}
             groupType="all"
             groupIndex={7}
@@ -514,11 +548,9 @@ export default function Scene({ fullData }) {
         </>
       )}
 
-        
-
       <OrbitControls
         enableRotate={false}
-        maxDistance={65}
+        maxDistance={70}
         minDistance={10}
         // minZoom={10}
       />
