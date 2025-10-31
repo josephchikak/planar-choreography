@@ -22,62 +22,62 @@ import tunnel from "tunnel-rat";
 
 gsap.registerPlugin(useGSAP);
 
-const ConstellationBackground = () => {
-  const radii = [
-    1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90,
-    95, 100,
-  ];
-  const radialSegments = 16;
-  const radialLength = 100;
+// const ConstellationBackground = () => {
+//   const radii = [
+//     1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90,
+//     95, 100,
+//   ];
+//   const radialSegments = 16;
+//   const radialLength = 100;
 
-  // Create circle geometries
-  const circleGeometries = useMemo(() => {
-    return radii.map((radius) => {
-      const segments = 128;
-      const geometry = new THREE.BufferGeometry();
-      const vertices = [];
-      for (let i = 0; i <= segments; i++) {
-        const theta = (i / segments) * Math.PI * 2;
-        vertices.push(Math.cos(theta) * radius, Math.sin(theta) * radius, 0);
-      }
-      geometry.setAttribute(
-        "position",
-        new THREE.Float32BufferAttribute(vertices, 3)
-      );
-      return geometry;
-    });
-  }, []);
+//   // Create circle geometries
+//   const circleGeometries = useMemo(() => {
+//     return radii.map((radius) => {
+//       const segments = 128;
+//       const geometry = new THREE.BufferGeometry();
+//       const vertices = [];
+//       for (let i = 0; i <= segments; i++) {
+//         const theta = (i / segments) * Math.PI * 2;
+//         vertices.push(Math.cos(theta) * radius, Math.sin(theta) * radius, 0);
+//       }
+//       geometry.setAttribute(
+//         "position",
+//         new THREE.Float32BufferAttribute(vertices, 3)
+//       );
+//       return geometry;
+//     });
+//   }, []);
 
-  // Create radial line geometries
-  const radialGeometries = useMemo(() => {
-    return Array.from({ length: radialSegments }, (_, i) => {
-      const theta = (i / radialSegments) * Math.PI * 2;
-      const x = Math.cos(theta) * radialLength;
-      const y = Math.sin(theta) * radialLength;
+//   // Create radial line geometries
+//   const radialGeometries = useMemo(() => {
+//     return Array.from({ length: radialSegments }, (_, i) => {
+//       const theta = (i / radialSegments) * Math.PI * 2;
+//       const x = Math.cos(theta) * radialLength;
+//       const y = Math.sin(theta) * radialLength;
 
-      return new THREE.BufferGeometry().setFromPoints([
-        new THREE.Vector3(0, 0, 0),
-        new THREE.Vector3(x, y, 0),
-      ]);
-    });
-  }, []);
+//       return new THREE.BufferGeometry().setFromPoints([
+//         new THREE.Vector3(0, 0, 0),
+//         new THREE.Vector3(x, y, 0),
+//       ]);
+//     });
+//   }, []);
 
-  return (
-    <group>
-      {circleGeometries.map((geometry, index) => (
-        <line key={`circle-${index}`} geometry={geometry}>
-          <lineBasicMaterial color={0x444466} transparent opacity={0.6} />
-        </line>
-      ))}
+//   return (
+//     <group>
+//       {circleGeometries.map((geometry, index) => (
+//         <line key={`circle-${index}`} geometry={geometry}>
+//           <lineBasicMaterial color={0x444466} transparent opacity={0.6} />
+//         </line>
+//       ))}
 
-      {radialGeometries.map((geometry, index) => (
-        <line key={`radial-${index}`} geometry={geometry}>
-          <lineBasicMaterial color={0x444466} transparent opacity={0.4} />
-        </line>
-      ))}
-    </group>
-  );
-};
+//       {radialGeometries.map((geometry, index) => (
+//         <line key={`radial-${index}`} geometry={geometry}>
+//           <lineBasicMaterial color={0x444466} transparent opacity={0.4} />
+//         </line>
+//       ))}
+//     </group>
+//   );
+// };
 
 const CustomGeometryParticles = ({ data, count, originalData, groupIndex }) => {
 
@@ -95,14 +95,14 @@ const CustomGeometryParticles = ({ data, count, originalData, groupIndex }) => {
   const { filters, setSelectedCinema, setAnimateParticles } = useStore();
 
   const animateParticles = useCallback(() => {
-    // console.log('🎬 Animation triggered!', points.current);
+
     gsap.fromTo(
       points.current.material.uniforms.uPosition,
       { value: 0.0 },
       {
         value: 8.0,
-        duration: 2,
-        ease: "back.out",
+        duration: 3,
+        ease:"sine.inOut",
       }
     );
   }, []);
@@ -201,6 +201,10 @@ const CustomGeometryParticles = ({ data, count, originalData, groupIndex }) => {
       uPosition: {
         value: 0.0,
       },
+      uResolution: {
+        value: new THREE.Vector2(window.innerWidth, window.innerHeight),
+      },
+      uDevicePixelRatio: { value: window.devicePixelRatio }
     };
   }, []);
 
@@ -302,6 +306,7 @@ const CustomGeometryParticles = ({ data, count, originalData, groupIndex }) => {
         colors.set([1.0, 0.84, 0.0], i * 3); // Gold color for featured cinemas
       } else {
         scales[i] = seededRandom(seed + 4) * 1.5 + 1.0; // Random scale for non-featured cinemas (1.0 to 2.5)
+        colors.set([1.0,1.0,1.0], i * 3); // Default color for non-featured cinemas
       }
     
       // Use simple random positioning (vertex shader will add Perlin noise)
@@ -325,12 +330,19 @@ const CustomGeometryParticles = ({ data, count, originalData, groupIndex }) => {
     const gl = state.gl;
     gl.setClearColor(0x141204, 1);
 
-    gl.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+
+  
+
+    // gl.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    
 
     gl.toneMapping = THREE.ACESFilmicToneMapping;
     gl.outputColorSpace = THREE.SRGBColorSpace;
 
     points.current.material.uniforms.uTime.value = clock.elapsedTime;
+    points.current.material.uniforms.uDevicePixelRatio.value = window.devicePixelRatio 
+
   });
 
   const lineGeometry = useMemo(() => {
@@ -486,7 +498,7 @@ export default function Scene({ fullData }) {
         percentage: 100,
       });
 
-      console.log("📊 D3 Prepared Data:", prepared.Feature[1][1]);
+
      
     }
   }, [fullData]);
@@ -531,7 +543,7 @@ export default function Scene({ fullData }) {
         /> */}
       <ambientLight intensity={1} />
 
-      <ConstellationBackground />
+      {/* <ConstellationBackground /> */}
 
       {filteredData && (
         <>

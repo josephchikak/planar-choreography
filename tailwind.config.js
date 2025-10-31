@@ -17,6 +17,8 @@ module.exports = {
         clash: ['var(--font-clash)', 'sans-serif'],
         chillax: ['var(--font-chillax)', 'sans-serif'],
         basis: ['var(--font-basis)', 'sans-serif'],
+        moirai: ['var(--font-moirai)', 'serif'],
+        fascinate: ['var(--font-fascinate)', 'cursive'],
       },
       colors: {
         primary: '#FDF9ED', // Example primary color

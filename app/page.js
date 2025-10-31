@@ -81,13 +81,13 @@ export default async function HomePage() {
       </div>
 
         <div className="h-full w-[90%] bg-background font-basis  flex-col gap-4  p-8 justify-center">
-          <p className=" text-green-600">[ Choose your experience ]</p>
+          <p className=" text-yellow-400">[ Choose your experience ]</p>
 
           <div className="flex flex-col gap-8 w-full h-full items-between justify-start py-8 ">
             {modes.map((mode, index) => (
               <Link key={index} href={mode.link}>
 
-            <div className=" w-full flex flex-row gap-4 items-start border-y-[0.5px] p-8 transition-all duration-200 ease-in-out hover:border-green-600">
+            <div className=" w-full flex flex-row gap-4 items-start border-y-[0.5px] p-8 transition-all duration-200 ease-in-out hover:border-yellow-400">
             <div className="flex flex-col justify-end text-primary gap-4 md:w-1/2 text-xl">
                 <p> {mode.name} </p>
               <p className="font-light text-primary text-sm w-full">

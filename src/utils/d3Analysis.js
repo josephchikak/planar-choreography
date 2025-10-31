@@ -44,11 +44,11 @@ export const analyzeAirtableData = (airtableData) => {
 
   // Group data by different fields for visualization
   const groups = {
-    City: d3.groups(data, d => d.City),
     Country: d3.groups(data, d => d.Country),
+    City: d3.groups(data, d => d.City),
+    Condition: d3.groups(data, d => d.Condition),
     Creation: d3.groups(data, d => d.Creation),
     Closure: d3.groups(data, d => d.Closure),
-    Condition: d3.groups(data, d => d.Condition),
     Feature: d3.groups(data, d => d.Feature),
     // Notes: d3.groups(data, d => d.Notes)
     // State: d3.groups(data, d => d.State)

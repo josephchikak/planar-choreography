@@ -154,6 +154,7 @@ const HomeScene = () => {
     <Canvas className='border-[0.5px] h-1/2'>
       <Suspense fallback={null}>
       <EarthScene />
+      {/* <OrbitControls /> */}
       <Preload all />
       </Suspense>
      

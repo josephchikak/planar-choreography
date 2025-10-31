@@ -45,22 +45,22 @@ const Hero = ({ fullData }) => {
 
     // Random selection
     const shuffled = [...urls].sort(() => 0.5 - Math.random());
-    const selectedUrls = shuffled.slice(0, 10);
+    const selectedUrls = shuffled.slice(0, 5);
 
     setImageUrls(selectedUrls);
-    console.log('Selected URLs:', selectedUrls.length);
+    // console.log('Selected URLs:', selectedUrls.length);
   }, [fullData])
 
 
     // Function to generate consistent random position based on index
   const getRandomPosition = (index) => {
-    const seed = index * 1438; // Use index as seed for consistent positioning
+    const seed = index * 1439; // Use index as seed for consistent positioning
     const randomX = (seed * 9301 + 49297) % 233280 / 233280; // Pseudo-random 0-1
     const randomY = (seed * 7919 + 12345) % 233280 / 233280; // Different calculation for Y
     
     return {
-      left: `${randomX * 80 + 10}%`, // 10-90% from left
-      top: `${randomY * 80 + 10}%`   // 10-90% from top
+      left: `${randomX * 100 -5}%`, // 10-90% from left
+      top: `${randomY * 80+ 10}%`   // 10-90% from top
     };
   };
   
@@ -72,7 +72,7 @@ const Hero = ({ fullData }) => {
       {imageUrls.map((url, index) => {
         const position = getRandomPosition(index);
         return (
-          <Image key={index} src={url} alt={`Cinema ${index}`}  width={300} height={200} 
+          <Image key={index} src={url} alt={`Cinema ${index}`}  width={200} height={200} 
           // loader={<div className='h-full w-full bg-slate-400'></div>} 
           style={{
             left: position.left,
@@ -80,7 +80,7 @@ const Hero = ({ fullData }) => {
             transform: 'translate(-50%, -50%)',
             // zIndex: index + 1, // Ensure proper stacking
           }}
-          className={`py-8 aspect-square object-cover absolute border-primary p-2 border-[0.5px] left-[${position.left}] top-[${position.top}]`}/>
+          className={`p-8 aspect-square object-cover absolute border-primary border-[0.5px] left-[${position.left}] top-[${position.top}]`}/>
         );
       })}
     </>

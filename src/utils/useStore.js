@@ -106,7 +106,28 @@ clearFilters: () => set((state) => {
 
     let filteredData = data;
 
+    // Handle selectedYear filter specially (if present)
+    if (filters.selectedYear && filters.selectedYear !== 'all') {
+      const year = parseInt(filters.selectedYear);
+      if (!isNaN(year)) {
+        filteredData = filteredData.filter(record => {
+          const creationRaw = record.fields?.Creation;
+          const closureRaw = record.fields?.Closure;
+          const creation = creationRaw ? parseInt(creationRaw) : null;
+          const closure = closureRaw ? parseInt(closureRaw) : null;
+
+          // Cinema was active in the selected year if:
+          // created on or before the year AND (not closed or closed on or after the year)
+          const createdByYear = creation === null || creation <= year;
+          const activeInYear = closure === null || closure >= year;
+          return createdByYear && activeInYear;
+        });
+      }
+    }
+
+    // Apply other filters (skip selectedYear since handled)
     Object.entries(filters).forEach(([field, value]) => {
+      if (field === 'selectedYear') return;
       if(value !== 'all'){
         const normalizedValue = value.toString().trim().toLowerCase();
         filteredData = filteredData.filter(record => {

@@ -1,11 +1,12 @@
 import '../styles/globals.css'
 
+
 export const metadata = {
   title: 'Dream Palaces',
   description: 'Interactive visualization of cinema data',
 }
 
-import { Open_Sans, Roboto_Mono, Sansation, Montez, Jura } from 'next/font/google'
+import { Open_Sans, Roboto_Mono, Sansation, Moirai_One, Jura, Fascinate_Inline } from 'next/font/google'
 
 import localFont from 'next/font/local'
 import Link from 'next/link'
@@ -17,6 +18,20 @@ const clash = localFont({
   style: '',
   subsets: ['latin'],
   // weight: '200',
+})
+
+const FascinateInline = Fascinate_Inline({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-fascinate',
+  weight: '400',
+})
+
+const moirai = Moirai_One({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-moirai',
+  weight: '400',
 })
 
 const chillax = localFont({
@@ -55,12 +70,7 @@ const sansation = Sansation({
   weight: '400',
 })
 
-const montez = Montez({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-montez',
-  weight: '400',
-})
+
 
 const jura = Jura({
   subsets: ['latin'],
@@ -74,12 +84,12 @@ const jura = Jura({
 export default function RootLayout({ children }) {
   return (
     <html lang="en"
-      className={`${openSans.variable} ${robotoMono.variable} ${sansation.variable} ${montez.variable} ${jura.variable} ${clash.variable} ${chillax.variable} ${basis.variable} font-sans`}
+      className={`${openSans.variable} ${robotoMono.variable} ${sansation.variable} ${moirai.variable} ${jura.variable} ${clash.variable} ${FascinateInline.variable} ${chillax.variable} ${basis.variable} font-sans`}
     >
     
       <body>
-      <nav className='w-screen flex justify-center items-center font-chillax font-thin  bg-background  border-b-[0.5px] border-primary p-4 text-primary'>
-        <Link href='/' className='cursor-pointer p-4 text-2xl'>Dream Palaces</Link>
+      <nav className='w-screen flex justify-center items-center font-fascinate bg-background  border-b-[0.5px] border-primary p-4 text-primary'>
+        <Link href='/' className='cursor-pointer p-4 text-5xl'>Dream Palaces</Link>
        
 
       </nav>
