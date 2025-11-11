@@ -2,7 +2,7 @@
 import React, { Suspense } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { useFrame, useThree } from '@react-three/fiber'
-import { OrbitControls, Preload, useTexture } from '@react-three/drei'
+import { Preload, useTexture, AdaptiveDpr, Bvh } from '@react-three/drei'
 import * as THREE from 'three'
 import { useMemo, useRef, useState, useEffect } from 'react'
 
@@ -152,6 +152,8 @@ export function EarthScene() {
 const HomeScene = () => {
   return (
     <Canvas className='border-[0.5px] h-1/2'>
+          <AdaptiveDpr pixelated />
+              <Bvh firstHitOnly></Bvh>
       <Suspense fallback={null}>
       <EarthScene />
       {/* <OrbitControls /> */}

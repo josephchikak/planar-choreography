@@ -2,13 +2,16 @@
 
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image';
+import { useStore } from '../../src/utils/useStore';
 
 const Hero = ({ fullData }) => {
 
       const [cachedData, setCachedData] = useState(null);
 
+      const imageUrls = useStore((state) => state.imageUrls);
+      const setImageUrls = useStore((state) => state.setImageUrls);
 
-     const [imageUrls, setImageUrls] = useState([]);
+    //  const [imageUrls, setImageUrls] = useState([]);
 
     useEffect(() => {
     let dataSource = fullData;

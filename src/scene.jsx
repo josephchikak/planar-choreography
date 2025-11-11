@@ -328,7 +328,7 @@ const CustomGeometryParticles = ({ data, count, originalData, groupIndex }) => {
   useFrame((state) => {
     const { clock } = state;
     const gl = state.gl;
-    gl.setClearColor(0x141204, 1);
+    gl.setClearColor('#000000ff', 1);
 
 
 

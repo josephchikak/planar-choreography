@@ -24,7 +24,9 @@ module.exports = {
         primary: '#FDF9ED', // Example primary color
         secondary: '#F3FFB6', // Example secondary color
         accent: '#10B981', // Example accent color
-        background: '#141204', // Example background color
+        background: '#000000ff', // Example background color
+        // background: '#141204', // Example background color
+
         foreground: '#F3F4F6', // Example foreground color
       },
   

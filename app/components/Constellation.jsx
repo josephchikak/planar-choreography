@@ -3,7 +3,7 @@
 import { Canvas, events } from "@react-three/fiber";
 import dynamic from 'next/dynamic';
 import { use, useEffect, useState } from 'react';
-import { Bvh } from "@react-three/drei";
+import { AdaptiveDpr, Bvh } from "@react-three/drei";
 import * as THREE from 'three'
 import { useStore } from "../../src/utils/useStore";
 import tunnel from "tunnel-rat";
@@ -60,8 +60,7 @@ export default function Constellation({fullData}) {
         camera={{ position: [0, 0, 50], fov: 75, }}
         // events={eventManagerFactory}
       >
-     
-
+        <AdaptiveDpr pixelated />
         <Bvh firstHitOnly>
 
         <Scene 

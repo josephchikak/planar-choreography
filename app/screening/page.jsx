@@ -1,10 +1,10 @@
+'use client'
+import Images from "../components/Images";
 
-
-
-export default function Screening() { 
-    return (
-        <div className="w-screen min-h-screen bg-background text-primary" >
-            <h1>Screening Room</h1>
-        </div>
-    );
+export default function Screening() {
+  return (
+    <div className="w-screen h-screen bg-background text-primary overflow-hidden relative">
+      <Images />
+    </div>
+  );
 }

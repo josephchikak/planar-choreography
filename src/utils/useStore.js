@@ -16,6 +16,7 @@ export const useStore = create((set, get) => ({
     error: null
   },
   preparedData: null,
+  imageUrls:[],
 
 //actions
 setData: (data) => set({ 
@@ -38,6 +39,7 @@ setSelectedCinema: (cinema) => set({ selectedCinema: cinema }),
 clearSelectedCinema: () => set({ selectedCinema: null }),
 setUpdateFilter: () => set(!filterUpdate),
 setAnimateParticles: (animateFn) => set({animateParticles: animateFn}),
+setImageUrls: (urls) => set({imageUrls: urls}),
 
   // Filter actions
   updateFilters: (field, value) => set((state) => {

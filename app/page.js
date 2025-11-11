@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Hero from "./components/Hero";
 import HomeScene from "./components/HomeScene";
+import { Suspense } from "react";
 
 export default async function HomePage() {
 
@@ -46,8 +47,10 @@ export default async function HomePage() {
   
 
   return (
-    <div className="w-screen flex flex-col items-center relative bg-background">
-      <div className="w-[90%]  h-full flex  font-inter text-primary md:grid grid-cols-2 gap-8 justify-start items-start bg-background relative bg-contain p-10">
+    <Suspense>
+
+    <div className="w-full flex flex-col items-center relative bg-background">
+      <div className="w-[80%] h-full flex  font-inter text-primary md:grid grid-cols-2 gap-8 justify-start items-start bg-background relative bg-contain p-10">
         {/* Add this gradient overlay */}
         {/* <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black opacity-100 pointer-events-none"></div> */}
         {/* <div className="absolute inset-0 backdrop-blur-sm pointer-events-none"></div> */}
@@ -80,10 +83,10 @@ export default async function HomePage() {
       
       </div>
 
-        <div className="h-full w-[90%] bg-background font-basis  flex-col gap-4  p-8 justify-center">
+        <div className="w-[100%] bg-background font-basis flex  flex-col gap-4  p-8 items-center justify-center">
           <p className=" text-yellow-400">[ Choose your experience ]</p>
 
-          <div className="flex flex-col gap-8 w-full h-full items-between justify-start py-8 ">
+          <div className="flex flex-col gap-8 w-[80%] items-between justify-start py-8 ">
             {modes.map((mode, index) => (
               <Link key={index} href={mode.link}>
 
@@ -112,6 +115,7 @@ export default async function HomePage() {
           </div>
         </div>
     </div>
+    </Suspense>
   );
 }
 
