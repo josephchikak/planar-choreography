@@ -2,7 +2,7 @@
   "name": "planar-choreography",
   "version": "1.0.0",
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev --turbopack & npx next-video sync -w",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -13,6 +13,9 @@
   "description": "",
   "dependencies": {
     "@gsap/react": "^2.1.2",
+    "@mux/mux-node": "^12.8.0",
+    "@mux/mux-player-react": "^3.8.0",
+    "@mux/mux-uploader-react": "^1.3.0",
     "@react-three/drei": "^10.6.1",
     "@react-three/fiber": "^9.3.0",
     "airtable": "^0.12.2",
@@ -21,6 +24,7 @@
     "gsap": "^3.13.0",
     "lil-gui": "^0.20.0",
     "next": "^15.0.0",
+    "next-video": "^2.5.1",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "three": "^0.179.0",

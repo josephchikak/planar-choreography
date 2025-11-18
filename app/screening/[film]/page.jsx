@@ -3,74 +3,68 @@ import Image from "next/image";
 import { useStore } from "../../../src/utils/useStore";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import MuxPlayer from "@mux/mux-player-react";
 
 export default function ScreeningPage() {
   const params = useParams()
-  const film = params.film
-  const imageUrls = useStore((state) => state.imageUrls);
-  const setImageUrls = useStore((state) => state.setImageUrls);
+  const playbackId = params.film // This is the playback ID
+  const [currentAsset, setCurrentAsset] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // Load images if not already loaded
+  // Load assets from API and find the matching one
   useEffect(() => {
-    if (!imageUrls || imageUrls.length === 0) {
-      // Check localStorage cache first
+    const loadAsset = async () => {
       try {
-        const cached = localStorage.getItem('airtable-cache');
-        if (cached) {
-          const parsed = JSON.parse(cached);
-          const dataSource = parsed.fullData || [];
-          
-          if (dataSource.length > 0) {
-            // Process images same as Hero component
-            const urls = dataSource
-              .filter(cinema => cinema.fields?.Images?.length > 0)
-              .map(cinema => cinema.fields.Images[0].url)
-              .filter(Boolean);
-
-            // Random selection
-            const shuffled = [...urls].sort(() => 0.5 - Math.random());
-            const selectedUrls = shuffled.slice(0, 5);
-
-            setImageUrls(selectedUrls);
-          }
+        const response = await fetch('/api/mux-assets');
+        const data = await response.json();
+        
+        if (data.success) {
+          const asset = data.assets.find(a => a.playbackId === playbackId);
+          setCurrentAsset(asset);
+        } else {
+          console.error('Failed to load assets:', data.error);
         }
       } catch (error) {
-        console.warn('Cache read failed:', error);
+        console.error('Error loading assets:', error);
+      } finally {
+        setLoading(false);
       }
-    }
-  }, [imageUrls, setImageUrls]);
+    };
 
+    loadAsset();
+  }, [playbackId]);
 
-
-  // Check if we have the specific film image
-  const filmImageUrl = imageUrls[film];
-
-  if (!filmImageUrl) {
+  if (loading || !currentAsset) {
     return (
       <div className="w-screen h-screen flex flex-col items-center justify-center bg-background text-primary">
         <h1 className="text-2xl font-basis mb-4">Loading film...</h1>
-        <p className="font-basis text-sm">Film {film}</p>
+        <p className="font-basis text-sm">Playback ID: {playbackId}</p>
       </div>
     );
   }
 
   return (
     <div className="w-screen h-screen flex flex-col items-center font-basis gap-4 justify-center bg-background text-primary overflow-hidden relative">
-      <h1 className="text-2xl mb-6">Movie Title</h1>
-      <div className="relative w-full max-w-4xl aspect-video">
-        <Image
-          src={filmImageUrl}
-          alt="Film Screening"
-          fill
-          className="object-contain"
+      <h1 className="text-2xl mb-6">
+        {currentAsset.originalPath?.split('/').pop()?.replace('.mp4', '') || 'Video'}
+      </h1>
+      <div className="relative w-full max-w-7xl  aspect-video">
+        <MuxPlayer
+          playbackId={currentAsset.playbackId}
+          poster={currentAsset.thumbnail}
+          controls
+          streamType="on-demand"
+          className="w-full h-full rounded-lg"
         />
       </div>
-      <p className="text-xs">
-        movie description goes here. This is a placeholder for the film details
-      </p>
-
-
-
+      <div className="text-center max-w-2xl">
+        <p className="text-xs mb-2">
+          <strong>Asset ID:</strong> {currentAsset.id}
+        </p>
+        <p className="text-xs">
+          <strong>File:</strong> {currentAsset.originalPath}
+        </p>
+      </div>
     </div>
   );
 }

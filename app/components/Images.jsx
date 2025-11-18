@@ -6,47 +6,68 @@ import { Image, ScrollControls, Scroll, useScroll, AdaptiveDpr, Bvh } from '@rea
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import {useStore} from '../../src/utils/useStore'
 
-
 const Images = () => {
     const router = useRouter()
     const { width } = useThree((state) => state.viewport)
     const w = width < 10 ? 1.5 / 3 : 1 / 3
 
     const [hovered, setHovered] = useState(null)
+    const [muxAssets, setMuxAssets] = useState([])
 
-    const imageUrls = useStore((state) => state.imageUrls);
+    // Load Mux assets from API
+    useEffect(() => {
+        const loadAssets = async () => {
+            try {
+                const response = await fetch('/api/mux-assets');
+                const data = await response.json();
+                
+                if (data.success) {
+                    setMuxAssets(data.assets);
+                } else {
+                    console.error('Failed to load assets:', data.error);
+                }
+            } catch (error) {
+                console.error('Error loading assets:', error);
+            }
+        };
+        
+        loadAssets();
+    }, []);
 
-    // Don't render if imageUrls are not ready
-    if (!imageUrls || imageUrls.length === 0) {
+    const handleImageClick = (index) => {
+        // Navigate to the film page with the playback ID
+        const asset = muxAssets[index];
+        if (asset) {
+            router.push(`/screening/${asset.playbackId}`);
+        }
+    }
+
+    // Don't render anything if no assets loaded yet
+    if (!muxAssets || muxAssets.length === 0) {
         return null;
     }
 
-    const handleImageClick = (index) => {
-        // Navigate directly to the film page using the index
-        router.push(`/screening/${index}`)
-    }
+    // useFrame((state, delta) =>{
+    //     state.gl.setClearColor('black')
 
-    useFrame((state, delta) =>{
-        state.gl.setClearColor('black')
-
-        //scale hovered
+    //     //scale hovered
       
-    })
+    // })
 
   return (
     <>
     {/* <Canvas> */}
 
     {/* <OrbitControls/> */}
-    <ScrollControls  horizontal damping={1} pages={imageUrls.length} distance={1}>
+    <ScrollControls  horizontal damping={1} pages={muxAssets.length} distance={1}>
           <Scroll>
      
-    {imageUrls.map((url, index) => (
-        url && <Image 
-            key={index}
-            url={url} 
+    {muxAssets.map((asset, index) => (
+        asset && <Image 
+            key={asset.id || index}
+            url={asset.thumbnail} 
             position={[index * 5, 0, 0]}
-            scale={[4, 4, 1]}
+            scale={[4, 3, 1]}
             onClick={() => handleImageClick(index)}
             onPointerOver={() => setHovered(index)}
             onPointerOut={() => setHovered(null)}
